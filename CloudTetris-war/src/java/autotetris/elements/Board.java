@@ -13,7 +13,7 @@ public class Board implements ATCommon {
         board = new Grid[YNUM][XNUM];
         for(int j=0;j<YNUM;j++){
             for(int i=0;i<XNUM;i++){
-                board[j][i]=new Grid((byte)0,Color.white);
+                board[j][i]=new Grid((byte)0,Color.white,-1);
             }
         }
     }
@@ -36,8 +36,8 @@ public class Board implements ATCommon {
         return line;
     }
     
-    public byte getGrid(int j, int i){
-        return board[j][i].value;
+    public int getGrid(int j, int i){
+        return board[j][i].hexcolor;
     }
 
     //return a matrix of grids
@@ -90,6 +90,7 @@ public class Board implements ATCommon {
             if (piece.check_point_range(x, y)) { //check the point is in range
                 board[y][x].value = 1;
                 board[y][x].color=piece.getType().color();
+                board[y][x].hexcolor=piece.getType().value();
             }
         }
     }
@@ -144,6 +145,7 @@ public class Board implements ATCommon {
                     for (int m = 0; m < XNUM; m++) {
                         board[k][m].value=board[k-1][m].value;
                         board[k][m].color=board[k-1][m].color;
+                        board[k][m].hexcolor=board[k-1][m].hexcolor;
                     }
                 }
                 for (int k = 0; k < XNUM; k++) {

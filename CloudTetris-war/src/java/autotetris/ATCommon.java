@@ -49,4 +49,14 @@ public interface ATCommon {
                                             {255,153,0},
                                             {153,102,0},
                                             {0,153,51}};
+    
+    public static final String[] PIECE_WEB_COLOR={"#00ced1",
+                                                  "#ff7f50",
+                                                  "#3cb371",
+                                                  "#d2b48c",
+                                                  "#dda0dd",
+                                                  "#4169e1",
+                                                  "#ffc0cb"
+        
+    };
 }

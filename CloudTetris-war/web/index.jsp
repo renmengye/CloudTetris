@@ -16,8 +16,12 @@
             var board;
             var piece;
             var score;
+            var color;
             
             var canvas;
+            
+            var canvasptr;
+            
             var ctx;
             
             var twidth;
@@ -31,7 +35,7 @@
             
             var t;
             
-            self.setInterval("requestServlet('TetrisServlet','action=paint')",15);
+            self.setInterval("requestServlet('TetrisServlet','action=paint')",40);
             
             
             function requestServlet(servletName, servletArguments){
@@ -51,6 +55,7 @@
                             board=data.board;
                             piece=data.piece;
                             score=data.score;
+                            color=data.color;
                         }
                     }
                 }
@@ -65,9 +70,14 @@
 
             function init(){
                 
+                canvas=new Array();
                 
-                canvas = document.getElementById("canvas");
-                ctx = canvas.getContext("2d");
+                canvas[0] = document.getElementById('canvas');
+                
+                canvas[1]=document.getElementById('canvas2');
+                
+                canvasptr=0;
+                
                 
                 twidth = 202;
                 theight = 382;
@@ -82,34 +92,53 @@
                 //requestServlet("TetrisServlet","action=start");
                 requestServlet('TetrisServlet','action=paint');
                 
-                setInterval(paint, 15);
+                setInterval(paint, 40);
+                
+                window.resizeTo(twidth+3,theight+110)
                 
             }
             
             function paint(){
                 var i,j;
-                //document.getElementById('txt').value="hoho3";
+                
+                
+                ctx = canvas[canvasptr].getContext("2d");
+                
                 ctx.clearRect(0,0,twidth,theight); 
                 
-                //document.getElementById('txt').value=ynum;
+                //ctx.fillText(color[0], twidth - 150, gap + 10);
                 
                 for(j=0;j<ynum;j++){
                     for(i=0;i<xnum;i++){
-                        //ctx.setColor(board[j][i].color);
                         
-                        if(board[j][i]==1){
+                        if(board[j][i]>=0){
+                            ctx.fillStyle=color[board[j][i]];
+                            
+                            //ctx.fillStyle="#0000ff";
                             ctx.fillRect(i * (xdim + gap) + gap, j * (ydim + gap) + gap, xdim, ydim);
+                            ctx.fillStyle="#000";
+                            ctx.strokeRect(i * (xdim + gap) + gap, j * (ydim + gap) + gap, xdim, ydim);
                         }
                     }
                 }
                 
-                for(i=0;i<3;i++){
+                for(i=0;i<4;i++){
                     var x=piece[i][0];
                     var y=piece[i][1];
+                    
+                    
+                    ctx.fillStyle=color[piece[4][0]];
                     ctx.fillRect(x * (xdim + gap) + gap, y * (ydim + gap) + gap, xdim, ydim);
+                    ctx.fillStyle="#000";
+                    ctx.strokeRect(x * (xdim + gap) + gap, y * (ydim + gap) + gap, xdim, ydim);
                 }
                 
                 ctx.fillText("SCORE: "+score, twidth - 80, gap + 10);
+                
+                canvas[canvasptr].style.visibility="visible";
+                canvas[1-canvasptr].style.visibility="hidden";
+                canvasptr=1-canvasptr;
+                
                 
                 //t=setTimeOut("paint()",30);
                 
@@ -123,19 +152,15 @@
 
     </head>
     <body onload="init();">
-        <!--<h1>Hello World!</h1>
-        <form name="Submit" action="TetrisServlet" method="get">&nbsp;
-            <!--<input type="text" id="txt2" />
-            <input type="submit" value="start" name="action" />
-            <input type="submit" value="paint" name="action" />
-        </form>
-        <input type="text" id="txt" />
-        <input type="button" value="start" onclick="requestServlet('TetrisServlet','action=start')"/>
-        <input type="button" value="score" onclick="requestServlet('TetrisServlet','action=score')" />
-        <input type="button" value="paint" onclick="requestServlet('TetrisServlet','action=paint')" />
-        <input type="button" value="refresh" onclick="paint()" />-->
-        <canvas id="canvas" width="202" height="382" style="border: 1px solid black;"></canvas>
-        <p><input type="button" value="re-start" onclick="requestServlet('TetrisServlet','action=start')"/></p>
+        <canvas id="canvas" width="202" height="382" style="border: 1px solid black; position:absolute; top:0;left:0;visibility: hidden;"></canvas>
+        <canvas id="canvas2" width="202" height="382" style="border: 1px solid black; position:absolute; top:0;left:0; visibility: hidden;"></canvas>
+        <p>
+            <input type="button" value="h+" onclick="requestServlet('TetrisServlet','action=speed&object=host&dir=plus')" style="position:fixed; top:390px; left:0px;" />
+            <input type="button" value="h-" onclick="requestServlet('TetrisServlet','action=speed&object=host&dir=minus')" style="position:fixed; top:390px; left:30px;" />
+            <input type="button" value="Restart Game" onclick="requestServlet('TetrisServlet','action=start')" style="position:fixed; top:390px; left:55px;" />
+            <input type="button" value="p+" onclick="requestServlet('TetrisServlet','action=speed&object=player&dir=plus')" style="position:fixed; top:390px; left:140px;" />
+            <input type="button" value="p-" onclick="requestServlet('TetrisServlet','action=speed&object=player&dir=minus')" style="position:fixed; top:390px; left:170px;" />
+        </p>
         
     </body>
 </html>
