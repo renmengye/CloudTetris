@@ -39,7 +39,7 @@
             
             var t;
             
-            self.setInterval("requestServlet('TetrisServlet','action=paint')",50);
+            self.setInterval("requestServlet('TetrisServlet','action=paint')",300);
             
             
             function requestServlet(servletName, servletArguments){
@@ -60,6 +60,7 @@
                             piecebuff=data.piece;
                             score=data.score;
                             color=data.color;
+                            paint();
                         }
                     }
                 }
@@ -132,7 +133,7 @@
                 //requestServlet("TetrisServlet","action=start");
                 requestServlet('TetrisServlet','action=paint');
                 
-                setInterval(paint, 50);
+                //setInterval(paint, 50);
                 
                 window.resizeTo(twidth+3,theight+110)
                 
@@ -190,6 +191,7 @@
 
                 //ctx.clearRect(twidth - 80, gap + 10, 80, 10);
                 //ctx.fillText("SCORE: "+score, twidth - 80, gap + 10);
+                document.getElementById("text").value=score.toString();
                 
                 //canvas[canvasptr].style.visibility="visible";
                 //canvas[1-canvasptr].style.visibility="hidden";
@@ -224,6 +226,7 @@
     <!--<canvas id="canvas" width="202" height="382" style="border: 1px solid black; position:absolute; top:0;left:0;visibility: hidden;"></canvas>
     //<canvas id="canvas2" width="202" height="382" style="border: 1px solid black; position:absolute; top:0;left:0; visibility: hidden;"></canvas>-->
     <p>
+        <input type="text" id="text" value="0" style="position:fixed; top:390px; left: 10px; width: 30px"/>
         <input type="button" value="Restart Game" onclick="new_game()" style="position:fixed; top:390px; left:55px;" />
         <!--
         <input type="button" value="h+" onclick="requestServlet('TetrisServlet','action=speed&object=host&dir=plus')" style="position:fixed; top:390px; left:0px;" />

@@ -12,8 +12,8 @@ public class TetrisConsole implements ATCommon {
 
     private Player player;              //computer AI agent
     private GameHost host;
-    public int player_react = 200;
-    public int host_react = 300;
+    public int player_react = 300;
+    public int host_react = 500;
 
     //keyboard control
     public void keyPress(KeyEvent e) {
