@@ -1,7 +1,6 @@
 package autotetris.elements;
 
 import autotetris.ATCommon;
-import java.awt.Color;
 
 
 public class Board implements ATCommon {
@@ -13,7 +12,7 @@ public class Board implements ATCommon {
         board = new Grid[YNUM][XNUM];
         for(int j=0;j<YNUM;j++){
             for(int i=0;i<XNUM;i++){
-                board[j][i]=new Grid((byte)0,Color.white,-1);
+                board[j][i]=new Grid((byte)0,-1);
             }
         }
     }
@@ -89,7 +88,6 @@ public class Board implements ATCommon {
             int y = piece.getY() + piece.getContour(i, CONTOUR_DY);
             if (piece.check_point_range(x, y)) { //check the point is in range
                 board[y][x].value = 1;
-                board[y][x].color=piece.getType().color();
                 board[y][x].hexcolor=piece.getType().value();
             }
         }
@@ -144,7 +142,6 @@ public class Board implements ATCommon {
                 for (int k = j; k > 0; k--) {
                     for (int m = 0; m < XNUM; m++) {
                         board[k][m].value=board[k-1][m].value;
-                        board[k][m].color=board[k-1][m].color;
                         board[k][m].hexcolor=board[k-1][m].hexcolor;
                     }
                 }
