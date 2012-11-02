@@ -39,18 +39,16 @@
             
             var t;
             
-            self.setInterval("requestServlet('TetrisServlet','action=paint')",300);
+            window.setInterval("requestServlet('TetrisServlet','action=paint')",300);
             
             
             function requestServlet(servletName, servletArguments){
                 var servlet = servletName;                //the name (URI) of your servlet
                 var arg = servletArguments                //any attributes you want to send
-                var req = servlet + "?" + arg;            //compiling the request
+                var req = servlet + "?" + arg + "&rand=" + Math.floor(Math.random*100);            //compiling the request
                 addrequest(req);                         //calls the addrequest function
                 request.onreadystatechange = function(){  //this is used to listen for changes in the request's status
                     if (request.readyState==4 && request.status==200){
-                        //document.getElementById('txt').value=request.responseText; 
-                        
                         
                         if(arg=="action=paint"){
                             
@@ -141,14 +139,6 @@
             
             function paint(){
                 var i,j;
-                
-                
-                //ctx = canvas[canvasptr].getContext("2d");
-
-
-                //ctx.clearRect(0,0,twidth,theight);
-                
-                //ctx.fillText(color[0], twidth - 150, gap + 10);
 
                 for(i=0;i<4;i++){
 
