@@ -24,7 +24,6 @@ import org.json.JSONObject;
 public class TetrisServlet extends HttpServlet implements ATCommon {
 
     //TetrisConsole console = null;
-
     @Override
     public void init() {
         //console = new TetrisConsole();
@@ -36,56 +35,46 @@ public class TetrisServlet extends HttpServlet implements ATCommon {
             throws ServletException, IOException {
 
         String action = request.getParameter("action");
-        
+
         HttpSession session = request.getSession(true);
-        
+
         TetrisConsole console;
-        
-        if(session.getAttribute("console")==null){
-            console=new TetrisConsole();
-            console.new_game();
+
+        if (session.getAttribute("console") == null) {
+            console = new TetrisConsole();
+            console.newGame();
             session.setAttribute("console", console);
-        }else{
-            console=(TetrisConsole)session.getAttribute("console");
+        } else {
+            console = (TetrisConsole) session.getAttribute("console");
         }
-        
+
         PrintWriter out = response.getWriter();
 
         if (action.equals("start")) {
-            console.new_game();
+            console.newGame();
         } else if (action.equals("score")) {
-            //response.setContentType("text/html;charset=UTF-8");
-            //try {
-
-            //out.println("Hello World!");
-            out.println(console.host().getScore());
-
-            //} finally {
-            out.flush();
-            out.close();
-            //}
+            try {
+                out.println(console.getHost().getScore());
+            } finally {
+                out.flush();
+                out.close();
+            }
         } else if (action.equals("paint")) {
             try {
                 JSONObject data = new JSONObject();
 
                 JSONArray board = new JSONArray();
                 JSONArray piece = new JSONArray();
-
                 JSONArray color = new JSONArray();
 
-
-                Board b = console.host().getBoard();
-
-                Piece p = console.host().getPiece();
+                Board b = console.getHost().getBoard();
+                Piece p = console.getHost().getPiece();
 
                 for (int j = 0; j < YNUM; j++) {
                     JSONArray bline = new JSONArray();
-
                     for (int i = 0; i < XNUM; i++) {
-
                         bline.put(b.getGrid(j, i));
                     }
-
                     board.put(bline);
                 }
 
@@ -104,17 +93,14 @@ public class TetrisServlet extends HttpServlet implements ATCommon {
                 grid.put(p.getType().value());
                 grid.put(0);
                 piece.put(grid);
-
                 data.put("piece", piece);
-
-                data.put("score", console.host().getScore());
+                data.put("score", console.getHost().getScore());
 
                 for (int i = 0; i < 7; i++) {
                     color.put(PIECE_WEB_COLOR[i]);
                 }
 
                 data.put("color", color);
-
 
                 out.print(data.toString());
                 out.flush();
@@ -128,24 +114,24 @@ public class TetrisServlet extends HttpServlet implements ATCommon {
             if (object.equals("host")) {
 
                 if (dir.equals("plus")) {
-                    console.host_acc();
-                    
-                    out.print(console.host_react);
+                    console.accelerateHost();
+
+                    out.print(console.hostWait);
 
                 } else if (dir.equals("minus")) {
-                    console.host_dcc();
-                    out.print(console.host_react);
+                    console.decelerateHost();
+                    out.print(console.hostWait);
                 }
 
             } else if (object.equals("player")) {
 
                 if (dir.equals("plus")) {
-                    console.player_acc();
-                    out.print(console.player_react);
+                    console.acceleratePlayer();
+                    out.print(console.playerWait);
 
                 } else if (dir.equals("minus")) {
-                    console.player_dcc();
-                    out.print(console.player_react);
+                    console.deceleratePlayer();
+                    out.print(console.playerWait);
                 }
 
             }

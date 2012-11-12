@@ -12,66 +12,66 @@ public class TetrisConsole implements ATCommon {
 
     private Player player;              //computer AI agent
     private GameHost host;
-    public int player_react = 300;
-    public int host_react = 500;
+    public int playerWait = 300;
+    public int hostWait = 500;
 
     //keyboard control
     public void keyPress(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_ENTER:
-                new_game();
+                newGame();
                 break;
             case KeyEvent.VK_UP:
-                host_acc();
+                accelerateHost();
                 break;
             case KeyEvent.VK_DOWN:
-                host_dcc();
+                decelerateHost();
                 break;
             case KeyEvent.VK_LEFT:
-                player_dcc();
+                deceleratePlayer();
                 break;
             case KeyEvent.VK_RIGHT:
-                player_acc();
+                acceleratePlayer();
         }
     }
 
-    public void host_acc() {
-        if (host_react - 10 > player_react) {
-            host_react -= 10;
-            host.setReact(host_react);
+    public void accelerateHost() {
+        if (hostWait - 10 > playerWait) {
+            hostWait -= 10;
+            host.setReact(hostWait);
         }
     }
 
-    public void host_dcc() {
-        if (host_react + 10 < 500) {
-            host_react += 10;
-            host.setReact(host_react);
+    public void decelerateHost() {
+        if (hostWait + 10 < 500) {
+            hostWait += 10;
+            host.setReact(hostWait);
         }
     }
 
-    public void player_dcc() {
-        if (player_react + 10 < host_react) {
-            player_react += 10;
+    public void deceleratePlayer() {
+        if (playerWait + 10 < hostWait) {
+            playerWait += 10;
         }
-        player.setReact(player_react);
+        player.setReact(playerWait);
     }
 
-    public void player_acc() {
-        if (player_react > 10) {
-            player_react -= 10;
-            player.setReact(player_react);
+    public void acceleratePlayer() {
+        if (playerWait > 10) {
+            playerWait -= 10;
+            player.setReact(playerWait);
         }
     }
 
     //@WebMethod(operationName = "new_game")
-    public void new_game() {
-        host = new GameHost(host_react);
-        player = new Player(host, player_react);
+    public void newGame() {
+        host = new GameHost(hostWait);
+        player = new Player(host, playerWait);
         host.setPlayer(player);
         host.start();
     }
 
-    public GameHost host() {
+    public GameHost getHost() {
         return host;
     }
 }
